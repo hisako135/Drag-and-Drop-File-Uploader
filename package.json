@@ -1,0 +1,14 @@
+{
+  "name": "sample_dragAndDrop_fileLoader",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/hisako135/Drag-and-Drop-File-Uploader.git",
+  "author": "hisako135",
+  "license": "MIT",
+  "scripts": {
+    "dev": "lite-server"
+  },
+  "dependencies": {
+    "lite-server": "^2.3.0"
+  }
+}
