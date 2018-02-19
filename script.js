@@ -1,66 +1,90 @@
 let dropArea = document.getElementById('drop-area')
+let progressBar = document.getElementById('progress-bar')
+let filesDone = 0
+let filesToDo = 0
 
-
-// dropArea.addEventListener('dragenter', handlerFunction, false)
-// dropArea.addEventListener('dragleave', handlerFunction, false)
-// dropArea.addEventListener('dragover', handlerFunction, false)
-// dropArea.addEventListener('drop', handlerFunction, false)
-
-
+// デフォルトのイベントをキャンセル
 ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
     dropArea.addEventListener(eventName, preventDefaults, false)
 })
+
+// ドラッグオーバー時のハイライト
+;['dragenter', 'dragover'].forEach(eventName => {
+    dropArea.addEventListener(eventName, highlight, false)
+})
+
+// ドラッグアウトしたらハイライト無効に
+;['dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, unhighlight, false)
+})
+
+// ドロップしたファイルの処理
+dropArea.addEventListener('drop', handleDrop, false)
+
 
 function preventDefaults(e) {
     e.preventDefault()
     e.stopPropagation()
 }
 
-
-
-;['dragenter', 'dragover'].forEach(eventName => {
-    dropArea.addEventListener(eventName, highlight, false)
-})
-
-;['dragleave', 'drop'].forEach(eventName => {
-    dropArea.addEventListener(eventName, unhighlight, false)
-})
-
 function highlight(e) {
     dropArea.classList.add('highlight')
-    console.log('どらっぐイン！');
+    console.log('どらっぐおーばー！');
 }
 
 function unhighlight(e) {
     dropArea.classList.remove('highlight')
-    console.log('どろっぷアウト！');
+    console.log('どらっぐあうと');
 }
 
-
-dropArea.addEventListener('drop', handleDrop, false)
-
-// ドロップ処理
 function handleDrop(e) {
+    console.log('どろっぷ！');
     let dt = e.dataTransfer
     let files = dt.files
 
-    handleFiles(files) {
-        ([...files]).forEach(uploadFile)
-    }
+    handleFiles(files)
 }
 
-// アップロード
+function handleFiles(files) {
+    files = [...files]
+    initializeProgress(files.length)
+    files.forEach(uploadFile)
+    files.forEach(previewFile)
+}
+
 function uploadFile(file) {
-    let url= 'YOUR URL HERE'
-    let formData = new formData()
+    let url= 'MY URL'
+    let formData = new FormData()
 
     formData.append('file', file)
-
 
     fetch(url, {
         method: 'POST',
         body: formData
     })
-    .then(() => {/* Done */})
+    .then(progressDone)
     .catch(() => {/*Error*/})
+}
+
+function previewFile(file) {
+    let reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onloadend = function() {
+        let img = document.createElement('img')
+        img.src = reader.result
+        document.getElementById('gallery').appendChild(img)
+    }
+}
+
+// プログレスバー
+function initializeProgress(numfiles) {
+    progressBar.value = 0
+    filesDone = 0
+    filesToDo = numfiles
+    console.log('プログレスバー初期化')
+}
+
+function progressDone() {
+    filesDone++
+    progressBar.value = filesDone / filesToDo * 100
 }
