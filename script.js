@@ -29,16 +29,13 @@ function preventDefaults(e) {
 
 function highlight(e) {
     dropArea.classList.add('highlight')
-    console.log('どらっぐおーばー！');
 }
 
 function unhighlight(e) {
     dropArea.classList.remove('highlight')
-    console.log('どらっぐあうと');
 }
 
 function handleDrop(e) {
-    console.log('どろっぷ！');
     let dt = e.dataTransfer
     let files = dt.files
 
@@ -63,7 +60,7 @@ function uploadFile(file) {
         body: formData
     })
     .then(progressDone)
-    .catch(() => {/*Error*/})
+    .catch(() => {})
 }
 
 function previewFile(file) {
@@ -81,7 +78,6 @@ function initializeProgress(numfiles) {
     progressBar.value = 0
     filesDone = 0
     filesToDo = numfiles
-    console.log('プログレスバー初期化')
 }
 
 function progressDone() {
